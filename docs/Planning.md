@@ -24,6 +24,7 @@ The `File` object represents an individual file uploaded by a user.
 - `file_keywords` (array): list of a file's keywords; individual keywords stored as strings
 - `file_sentiment` (integer): a file's determined sentiment
   - the key for a file's sentiment is shown below:
+
   | Identifier | Description |
   | :--------: | ----------- |
   | -2         | TBD         |
@@ -49,24 +50,24 @@ Allows a user to:
 ##### Keywords
 
 - `generateKeywords(text)`
-  - Description: Analyzes given text for most common/significant keywords.
+  - Description: Analyzes given text for most common/significant words.
   - Parameters:
-    - `text` (string): text content of a File object
+    - `text` (string): text content of a `File` object
   - Returns:
-    - `response` (JSON object): list of strings containing the most common/significant keywords of the input text
+    - `response` (JSON object): contains list of strings with the keywords of the input text
     - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
-    - `error` (JSON object):
+    - `error` (JSON object): set if `success` equals `False`, empty otherwise; contains string with error details
 
 ##### Sentiment
 
 - `analyzeSentiment(text)`
-  - Description: Analyzes given text and assigns it a sentiment ranging from negative to positive.
+  - Description: Analyzes given text and assigns it a sentiment ranging from (TBD).
   - Parameters:
-    - `text` (string): text content of a File object
+    - `text` (string): text content of a `File` object
   - Returns:
-    - `response` (JSON object): integer that represents a file's determined sentiment
+    - `response` (JSON object): contains integer that represents a file's determined sentiment
     - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
-    - `error` (JSON object):
+    - `error` (JSON object): set if `success` equals `False`, empty otherwise; contains string with error details
 
 ##### Translation
 
@@ -75,9 +76,9 @@ Allows a user to:
   - Parameters:
     - `text` (string): text content of a File object
   - Returns:
-    - `response` (JSON object): text content in `target_language`
+    - `response` (JSON object): contains string of text content in `target_language`
     - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
-    - `error` (JSON object):
+    - `error` (JSON object): set if `success` equals `False`, empty otherwise; contains string with error details
 
 ---
 
@@ -104,12 +105,14 @@ A user will be able to:
 - use unique credentials to access the online storage system via a web browser
 - search and browse their uploaded files in the online storage
 - select an uploaded file and view its contents
+-
+#### File Object
+The `User` object represents an individual, unique user of platform.
 
-#### User Object Attributes
-The `User` object has the following attributes:
+##### User Object Attributes
 - `first_name` (string): user's first name
 - `last_name` (string): user's last name
-- `email` (string): user's email; used as each user's unique identifier
+- `email` (string): user's email; used as a user's unique identifier
 - `files` (JSON object): all of a user's `File` objects
 - `occupation` (string): user's occupation
 - `created` (timestamp): time at which a `User` object was created; measured in seconds since the Unix epoch
