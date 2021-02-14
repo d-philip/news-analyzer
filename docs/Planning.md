@@ -107,7 +107,7 @@ A user will be able to:
 - select an uploaded file and view its contents
 -
 #### File Object
-The `User` object represents an individual, unique user of platform.
+The `User` object represents an individual, unique user of the platform.
 
 ##### User Object Attributes
 - `first_name` (string): user's first name
