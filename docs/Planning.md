@@ -9,15 +9,20 @@ A user will be able to:
 - have their uploaded files securely stored in an online storage system that is unique to the user
 - choose whether or not they would like to pre-process text analysis on their uploaded file
 
-#### File Object Attributes
-- `file_name`: string that contains the user's desired display name for a file
-- `file_id`: integer that serves as the unique ID of a file
-- `file_extension`: string that identifies the type of a file
-- `file_content`: string containing the text content of a file
-- `upload_time`: string that contains the timestamp of when a file was uploaded
-- `modified_time`: string that contains the timestamp of when a file was last modified
-- `file_keywords`: child object containing a file's most common/significant keywords
-- `file_sentiment`: integer that represents a file's determined sentiment
+#### File Object
+The `File` object represents an individual file uploaded by a user.
+
+##### Attributes
+- `file_name` (string): display name for a file, set by user on upload
+- `file_id` (integer): unique ID of a file
+- `file_source` (string): description of how a file was uploaded; equals "disk" for files uploaded from a user's computer or "web" for files uploaded through the News Feed Ingester
+- `file_url` (string): a file's URL, if `file_source` equals "web"; empty if `file_source` equals "disk"
+- `file_extension` (string): type of an uploaded file, if `file_source` equals "disk"; empty if `file_source` equals "web"
+- `file_content` (string): text content of a file
+- `upload_time` (timestamp): time at which a file was uploaded; measured in seconds since the Unix epoch
+- `modified_time` (timestamp): time at which a file was last modified; measured in seconds since the Unix epoch
+- `file_keywords` (array): list of a file's keywords; individual keywords stored as strings
+- `file_sentiment` (integer): a file's determined sentiment
   - the key for a file's sentiment is shown below:
   | Identifier | Description |
   | :--------: | ----------- |
@@ -43,8 +48,8 @@ Allows a user to:
 
 ##### Keywords
 
-- `createKeywords(text)`
-  - Description: Analyzes text for most common/significant keywords.
+- `generateKeywords(text)`
+  - Description: Analyzes given text for most common/significant keywords.
   - Parameters:
     - `text` (string): text content of a File object
   - Returns:
@@ -52,38 +57,28 @@ Allows a user to:
     - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
     - `error` (JSON object):
 
-
-- `getKeywords(file_object)`
-  - Description: Retrieves a File object's keywords, if it has any.
-  - Parameters:
-    - `file_object` (File object): File object
-  - Returns:
-    - `response` (JSON object): list of strings containing a File object's most common/significant keywords
-    - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
-    - `error` (JSON object):
-
-
-- `modifyKeywords(new_keywords)`
-  - Description: Overwrites a File object's keywords with the input keywords.
-  - Parameters:
-    - `new_keywords` (string): text content of a File object
-  - Returns:
-    - `response` (JSON object): list of strings containing the most modified list of keywords
-    - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
-    - `error` (JSON object):
-
-
-- `deleteKeywords(file_object)`
-  - Description: Overwrites a File object's keywords with the input keywords.
-  - Parameters:
-    - `file_object` (File object): File object
-  - Returns:
-    - `response` (JSON object): returns File object with an empty list for its `keywords` attribute
-    - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
-    - `error` (JSON object):
-
-
 ##### Sentiment
+
+- `analyzeSentiment(text)`
+  - Description: Analyzes given text and assigns it a sentiment ranging from negative to positive.
+  - Parameters:
+    - `text` (string): text content of a File object
+  - Returns:
+    - `response` (JSON object): integer that represents a file's determined sentiment
+    - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
+    - `error` (JSON object):
+
+##### Translation
+
+- `translateText(text, base_language, target_language)`
+  - Description: Translates given text from `base_language` to `target_language`.
+  - Parameters:
+    - `text` (string): text content of a File object
+  - Returns:
+    - `response` (JSON object): text content in `target_language`
+    - `success` (boolean): set to `True` if function executed successfully, otherwise set to `False`
+    - `error` (JSON object):
+
 ---
 
 ## News Feed Ingester
@@ -94,6 +89,12 @@ Allows a user to:
 - have their submitted news article turned into a `File` object and stored in an online storage system that is unique to the user
 - choose whether or not they would like to pre-process text analysis on their submitted article
 
+#### News Feed Object
+
+
+##### Attributes
+Using the News Feed Ingester produces a `File` object, so its attributes are that of a `File` object.
+
 ---
 
 ## Online File Storage
@@ -103,3 +104,12 @@ A user will be able to:
 - use unique credentials to access the online storage system via a web browser
 - search and browse their uploaded files in the online storage
 - select an uploaded file and view its contents
+
+#### User Object Attributes
+The `User` object has the following attributes:
+- `first_name` (string): user's first name
+- `last_name` (string): user's last name
+- `email` (string): user's email; used as each user's unique identifier
+- `files` (JSON object): all of a user's `File` objects
+- `occupation` (string): user's occupation
+- `created` (timestamp): time at which a `User` object was created; measured in seconds since the Unix epoch
