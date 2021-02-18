@@ -3,26 +3,26 @@
 # ----------------------------------------------------------------------------------
 
 class User():
-    def get(self, email=None, user_list):
+    def get(self, user_json, email=None):
 
         if (email is None):
-            return user_list
+            return user_json
         else:
-            user_exists = email in user_list # TODO: look for specific user in DB
+            user_exists = email in user_json # TODO: look for specific user in DB
 
             if (user_exists == False):
                 return {"error": "User could not be found."}, 404
             else:
-                user = user_list[email]
+                user_obj = user_json[email]
                 user_info = {
-                    'first_name': user.first_name,
-                    'last_name': user.last_name,
-                    'occupation': user.occupation,
-                    'created': user.created,
+                    'first_name': user_obj['first_name'],
+                    'last_name': user_obj['last_name'],
+                    'occupation': user_obj['occupation'],
+                    'created': user_obj['created'],
                 }
                 return user_info, 200
 
-    def post(self, user_info, user_list):
+    def post(self, user_info, user_json):
         # create new user object and add to DB
         user_created = {} # TODO: query DB to check if user was successfully added
 
@@ -37,10 +37,10 @@ class User():
         user_info = changes
         return {'response': 'User info successfully changed.'}, 200
 
-    def delete(self, email, user_list):
+    def delete(self, email, user_json):
         # delete user
-        user_exists = email in user_list
-        if (!user_exists):
+        user_exists = email in user_json
+        if (user_exists == False):
             return {"error": "User could not be found."}, 404
         else:
             # remove_user(user) # TODO: remove specified user from DB
@@ -57,7 +57,7 @@ class File():
         if (file_id is None):
             files = [] # TODO: get file objects from DB
             return {'files': files}, 200
-        else
+        else:
             file = file_id # TODO: get specific file from DB
             return {'files': file}, 200
 
