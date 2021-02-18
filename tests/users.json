@@ -1,0 +1,25 @@
+{
+  "djphilip@bu.edu":
+    {
+      "first_name": "Damani",
+      "last_name": "Philip",
+      "occupation": "student",
+      "created": 1613614196
+    },
+
+    "johndoe@gmail":
+      {
+        "first_name": "John",
+        "last_name": "Doe",
+        "occupation": "artist",
+        "created": 1613563758
+      },
+      
+    "janedoe@gmail.com":
+      {
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "occupation": "investor",
+        "created": 1612922985
+      }
+}

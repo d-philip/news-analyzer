@@ -1,23 +1,29 @@
+# ----------------------------------------------------------------------------------
+# User Object
+# ----------------------------------------------------------------------------------
+
 class User():
-    def get(self, email):
-        user = email # TODO: look for specific user in DB
+    def get(self, email=None, user_list):
 
-        if (user is None):
-            return {"error": "User could not be found."}, 404
+        if (email is None):
+            return user_list
         else:
-            user_info = {
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'occupation': user.occupation,
-                'created': user.created,
-                'files': user.files
-            }
-            return user_info, 200
+            user_exists = email in user_list # TODO: look for specific user in DB
 
-    def post(self):
+            if (user_exists == False):
+                return {"error": "User could not be found."}, 404
+            else:
+                user = user_list[email]
+                user_info = {
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'occupation': user.occupation,
+                    'created': user.created,
+                }
+                return user_info, 200
+
+    def post(self, user_info, user_list):
         # create new user object and add to DB
-        user_info = request.user_data # TODO: get user data from request
         user_created = {} # TODO: query DB to check if user was successfully added
 
         if(user_created is not None):
@@ -31,12 +37,17 @@ class User():
         user_info = changes
         return {'response': 'User info successfully changed.'}, 200
 
-    def delete(self, email):
+    def delete(self, email, user_list):
         # delete user
-        user = email
-        remove_user(user) # TODO: remove specified user from DB
-        return 204
+        user_exists = email in user_list
+        if (!user_exists):
+            return {"error": "User could not be found."}, 404
+        else:
+            # remove_user(user) # TODO: remove specified user from DB
+            return 204
 
+# ----------------------------------------------------------------------------------
+# File Object
 # ----------------------------------------------------------------------------------
 
 class File():
@@ -73,6 +84,7 @@ class File():
 
 # ----------------------------------------------------------------------------------
 # Text Analysis Functions
+# ----------------------------------------------------------------------------------
 
 def generateKeywords(text):
     nlp_api_key = ''
