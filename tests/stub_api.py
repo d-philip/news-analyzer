@@ -42,9 +42,16 @@ class User():
             else:
                 return {'error': 'Error creating user.'}, 404
 
-    def patch(self):
+    def patch(self, new_user_info, email, user_json):
         # update user attributes
-        return {'response': 'User info successfully changed.'}, 200
+        user_exists = email in user_json
+
+        if (user_exists == False):
+            return {"error": "User could not be found."}, 404
+        else:
+            for key in new_user_info:
+                user_json[email][key] = new_user_info[key]
+            return {'response': 'User info successfully changed.'}, 200
 
     def delete(self, email, user_json):
         # delete user

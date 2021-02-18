@@ -29,13 +29,18 @@ def test_post_user():
                 "occupation": "student",
                 "created": 1613614196
                 }
-                
+
     assert user_api.post(user_info=new_user1, user_json=user_list) == ({'response': 'User data inserted successfully.'}, 201)
     assert user_api.post(user_info=new_user2, user_json=user_list) == ({"error": "Email is already in use."}, 404)
 
-# def test_patch_user():
-#
-#
+def test_patch_user():
+    profile_changes = {
+        "occupation": "interior designer"
+    }
+
+    assert user_api.patch(new_user_info=profile_changes, email='johndoe@gmail.com', user_json=user_list) == ({'response': 'User info successfully changed.'}, 200)
+    assert user_api.patch(new_user_info=profile_changes, email='octopus.dr@gmail.com', user_json=user_list) == ({"error": "User could not be found."}, 404)
+
 # def test_delete_user():
 
 
