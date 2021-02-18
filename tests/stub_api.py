@@ -33,8 +33,6 @@ class User():
 
     def patch(self):
         # update user attributes
-        changes = request.new_data
-        user_info = changes
         return {'response': 'User info successfully changed.'}, 200
 
     def delete(self, email, user_json):
@@ -72,14 +70,12 @@ class File():
 
     def patch(self):
         # update file attributes
-        changes = request.new_data
-        user_info = changes
         return {'response': 'File info successfully changed.'}, 200
 
     def delete(self, file_id):
         # delete file
         file = file_id
-        remove_file(file) # TODO: remove specified file from DB
+        # remove_file(file) # TODO: remove specified file from DB
         return 204
 
 # ----------------------------------------------------------------------------------
