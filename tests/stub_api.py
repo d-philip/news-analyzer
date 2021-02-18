@@ -14,13 +14,7 @@ class User():
                 return {"error": "User could not be found."}, 404
             else:
                 user_obj = user_json[email]
-                user_info = {
-                    'first_name': user_obj['first_name'],
-                    'last_name': user_obj['last_name'],
-                    'occupation': user_obj['occupation'],
-                    'created': user_obj['created'],
-                }
-                return user_info, 200
+                return user_obj, 200
 
     def post(self, user_info, user_json):
         # create new user object and add to DB
