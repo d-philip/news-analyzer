@@ -18,12 +18,29 @@ class User():
 
     def post(self, user_info, user_json):
         # create new user object and add to DB
-        user_created = {} # TODO: query DB to check if user was successfully added
 
-        if(user_created is not None):
-            return {'response': 'User data inserted successfully.'}, 201
+        email = user_info['email']
+        user_exists = email in user_json
+
+        if (user_exists == True):
+            return {"error": "Email is already in use."}, 404
         else:
-            return {'error': 'Error creating user.'}, 404
+            new_user = {
+                        user_info['email']:
+                            {
+                            "first_name": user_info["first_name"],
+                            "last_name": user_info["last_name"],
+                            "occupation": user_info["occupation"],
+                            "created": user_info["created"]
+                            }
+                        }
+            user_json.update(new_user)
+
+            user_created = email in user_json # TODO: query DB to check if user was successfully added
+            if(user_created == True):
+                return {'response': 'User data inserted successfully.'}, 201
+            else:
+                return {'error': 'Error creating user.'}, 404
 
     def patch(self):
         # update user attributes
