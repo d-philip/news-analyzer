@@ -41,8 +41,9 @@ def test_patch_user():
     assert user_api.patch(new_user_info=profile_changes, email='johndoe@gmail.com', user_json=user_list) == ({'response': 'User info successfully changed.'}, 200)
     assert user_api.patch(new_user_info=profile_changes, email='octopus.dr@gmail.com', user_json=user_list) == ({"error": "User could not be found."}, 404)
 
-# def test_delete_user():
-
+def test_delete_user():
+    assert user_api.delete(email='djphilip@bu.edu', user_json=user_list) == 204
+    assert user_api.delete(email='applebees@gmail.com', user_json=user_list) == ({"error": "User could not be found."}, 404)
 
 # ----------------------------
 # File Object Tests

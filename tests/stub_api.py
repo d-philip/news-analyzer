@@ -60,6 +60,7 @@ class User():
             return {"error": "User could not be found."}, 404
         else:
             # remove_user(user) # TODO: remove specified user from DB
+            del user_json[email]
             return 204
 
 # ----------------------------------------------------------------------------------
