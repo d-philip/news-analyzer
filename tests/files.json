@@ -1,0 +1,24 @@
+{
+  "33f603cf-ac7f-4195-98a6-20ba3b910c93":
+    {
+      "file_name": "Matsuo Basho Haiku",
+      "file_source": "disk",
+      "file_extension": "pdf",
+      "file_content": "An old silent pond...\nA frog jumps into the pond,\nsplash! Silence again.",
+      "upload_time": 1613614196,
+      "modified_time": 1613614196,
+      "file_keywords": ["silent", "pond", "frog"],
+      "file_sentiment": 1
+    },
+  "d914350c-e3fb-442d-8856-25b45dccb1ae":
+    {
+      "file_name": "Hamlet Excerpt",
+      "file_source": "disk",
+      "file_extension": "txt",
+      "file_content": "To be, or not to be, that is the question:\nWhether ’tis nobler in the mind to suffer\nThe slings and arrows of outrageous fortune,\nOr to take arms against a sea of troubles",
+      "upload_time": 1613563758,
+      "modified_time": 1613566758,
+      "file_keywords": [],
+      "file_sentiment": -1
+    }
+}

@@ -1,4 +1,10 @@
 # ----------------------------------------------------------------------------------
+# Imports
+# ----------------------------------------------------------------------------------
+from datetime import datetime
+import uuid
+
+# ----------------------------------------------------------------------------------
 # User Object
 # ----------------------------------------------------------------------------------
 
@@ -6,7 +12,7 @@ class User():
     def get(self, user_json, email=None):
 
         if (email is None):
-            return user_json
+            return user_json, 200
         else:
             user_exists = email in user_json # TODO: look for specific user in DB
 
@@ -69,33 +75,66 @@ class User():
 
 class File():
 
-    def get(self, file_id=None):
+    def get(self, files_json, file_id=None):
         # return list of uploaded files or file with specified ID
         if (file_id is None):
-            files = [] # TODO: get file objects from DB
-            return {'files': files}, 200
+            # TODO: return list of a user's files
+            return files_json, 200
         else:
-            file = file_id # TODO: get specific file from DB
-            return {'files': file}, 200
+            file_exists = file_id in files_json # TODO: look for specific file in DB
 
-    def post(self):
+            if (file_exists == False):
+                return {"error": "File could not be found."}, 404
+            else:
+                file_obj = files_json[file_id]
+                return file_obj, 200
+
+    def post(self, file_info, files_json):
         # upload file to storage system
-        file_uploaded = {} # TODO: query DB to check if file was successfully added
 
-        if(file_uploaded is not None):
-            return {'response': 'File uploaded successfully.'}, 201
+        new_id = str(uuid.uuid4())
+        new_file = {
+                    new_id: # generate random ID
+                        {
+                        "file_name": file_info["file_name"],
+                        "file_source": file_info["file_source"],
+                        "file_extension": file_info["file_extension"],
+                        "file_content": "",
+                        "file_url": "",
+                        "upload_time": datetime.now(),
+                        "modified_time": datetime.now(),
+                        "file_keywords": [],
+                        "file_sentiment": None
+                        }
+                    }
+        files_json.update(new_file)
+
+        file_created = new_id in files_json # TODO: query DB to check if user was successfully added
+        if(file_created == True):
+            return {'response': 'File data inserted successfully.'}, 201
         else:
-            return {'error': 'Error uploading file.'}, 404
+            return {'error': 'Error creating file.'}, 404
 
-    def patch(self):
+    def patch(self, new_file_info, file_id, files_json):
         # update file attributes
-        return {'response': 'File info successfully changed.'}, 200
+        file_exists = file_id in files_json
 
-    def delete(self, file_id):
+        if (file_exists == False):
+            return {"error": "File could not be found."}, 404
+        else:
+            for key in new_file_info:
+                files_json[file_id][key] = new_file_info[key]
+            files_json[file_id]["modified_time"] = datetime.now()
+            return {'response': 'File info successfully changed.'}, 200
+
+    def delete(self, file_id, files_json):
         # delete file
-        file = file_id
-        # remove_file(file) # TODO: remove specified file from DB
-        return 204
+        file_exists = file_id in files_json
+        if (file_exists == False):
+            return {"error": "File could not be found."}, 404
+        else:
+            del files_json[file_id]
+            return 204
 
 # ----------------------------------------------------------------------------------
 # Text Analysis Functions

@@ -106,7 +106,7 @@ A user will be able to:
 - search and browse their uploaded files in the online storage
 - select an uploaded file and view its contents
 -
-#### File Object
+#### User Object
 The `User` object represents an individual, unique user of the platform.
 
 ##### User Object Attributes
