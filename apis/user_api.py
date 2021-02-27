@@ -35,8 +35,8 @@ class User(Resource):
             if (user_exists == False):
                 return {"error": "User could not be found."}, 404
             else:
-                user_info = email       # TODO: retrieve user info
-                return user_info, 200
+                user_obj = email       # TODO: retrieve user info
+                return user_obj, 200
 
     def post(self, user_info):
         '''
@@ -52,7 +52,7 @@ class User(Resource):
 
         '''
         email = user_info['email']
-        user_exists = email in user_json
+        user_exists = True              # TODO: check that a specific user exists in DB
 
         if (user_exists == True):
             return {"error": "Email is already in use."}, 404
@@ -76,7 +76,7 @@ class User(Resource):
 
     def patch(self, new_user_info):
         '''
-        .
+        Updates the given fields of a user's information.
 
         Parameters
         ----------
@@ -113,8 +113,7 @@ class User(Resource):
         if (user_exists == False):
             return {"error": "User could not be found."}, 404
         else:
-                                        # TODO: remove specified user from DB
-            return 204
+            return 204                  # TODO: remove specified user from DB
 
 # ----------------------------------------------------------------------------------
 # API Routes
