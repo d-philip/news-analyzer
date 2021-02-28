@@ -78,14 +78,16 @@ class File(Resource):
         else:
             return {'error': 'Error creating file.'}, 404
 
-    def patch(self, email, new_file_info):
+    def patch(self, email, file_id, new_file_info):
         '''
         Updates the given fields of a file's information.
 
         Parameters
         ----------
+        file_id : integer
+            ID of a specific file.
         new_file_info : JSON object
-            The fields and updated values that are going to overwrite a file's existing information; must include the ID of the file.
+            The fields and updated values that are going to overwrite a file's existing information.
 
         Returns
         -------
@@ -122,5 +124,11 @@ class File(Resource):
         else:
             return 204                  # TODO: remove specified file from DB
 
+# ----------------------------------------------------------------------------------
+# API Routes
+# ----------------------------------------------------------------------------------
 api.add_resource(File, '/users/<string:email>/files/', endpoint='files')
 api.add_resource(File, '/users/<string:email>/files/<uuid:file_id>', endpoint='file')
+
+if __name__ == '__main__':
+    app.run(debug=True)
