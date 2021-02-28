@@ -35,14 +35,14 @@ def generateKeywords(text):
     nlp_api_instance = nlp_api_url + nlp_api_key
 
     # TODO: check that token is valid
-    req_url = 'http://localhost:5000/users/' + email + '/files/' + file_id
+    req_url = 'http://localhost:5000/users/' + r.form['email'] + '/files/' + r.form['file_id']
     get_res = r.get(req_url)
 
     if get_res.status_code == 200:
         get_res_json = get_res.json()
-        file_text = res_json['file_content']
+        file_text = get_res_json['file_content']
 
-        if len(file_text < 1):
+        if len(file_text) < 1:
             return {'error': 'The text of the chosen file could not be retrieved, thus, no keywords could be generated'}, 400
         else:
             # keywords = nlp_api_instance.keywords(nlp_api_url, nlp_api_key, text)
@@ -50,14 +50,11 @@ def generateKeywords(text):
             patch_res = r.patch(req_url, data={'file_keywords': keywords})
 
             if patch_res.status_code == 200:
-                return 200
+                return {'response': 'Keywords successfully generated and saved.'}, 200
             else:
                 return patch_res.json()
     else:
         return get_res_json
-
-
-    return keywords
 
 if __name__ == '__main__':
     app.run(debug=True)
