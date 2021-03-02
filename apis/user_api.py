@@ -1,7 +1,8 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
-import requests as r
+import db_functions as db
+import json
 
 # ----------------------------------------------------------------------------------
 # User API
@@ -12,10 +13,9 @@ CORS(app)
 api = Api(app)
 
 class User(Resource):
-    def get(self, email=None):
+    def get(self, email):
         '''
         Retrieves a specified user's information from the database if an email is specified.
-        If an email is not specified, retrieves a list of all users in the database.
 
         Parameters
         ----------
@@ -26,19 +26,15 @@ class User(Resource):
         -------
 
         '''
-        if (email is None):
-            user_list = []              # TODO: retrieve list of users from DB
-            return user_list, 200
+        # retrieve user info from DB
+        user = db.get_user(email)
+
+        if (user is None):
+            return {'error': 'User could not be found.'}, 404
         else:
-            user_exists = True          # TODO: check that a specific user exists in DB
+            return user, 200
 
-            if (user_exists == False):
-                return {"error": "User could not be found."}, 404
-            else:
-                user_obj = email       # TODO: retrieve user info
-                return user_obj, 200
-
-    def post(self, user_info):
+    def post(self):
         '''
         Retrieves a new user's information from the request and adds it to the database.
 
@@ -51,30 +47,25 @@ class User(Resource):
         -------
 
         '''
+        user_info = request.get_json(force=True)
         email = user_info['email']
-        user_exists = True              # TODO: check that a specific user exists in DB
 
-        if (user_exists == True):
-            return {"error": "Email is already in use."}, 404
-        else:
-            new_user = {
-                        user_info['email']:
-                            {
-                            "first_name": user_info["first_name"],
-                            "last_name": user_info["last_name"],
-                            "occupation": user_info["occupation"],
-                            "created": user_info["created"]
-                            }
-                        }
-                                        # TODO: add the 'new_user' object to the database
+        # check whether or not a specific user exists in DB
+        existing_user = db.get_user(email)
 
-            user_created = True         # TODO: query DB to check if user was successfully added
+        if (existing_user is None):
+            # add the 'new_user' object to the database
+            user_created = db.create_user(user_info)
+            print(user_created)
+
             if(user_created == True):
                 return {'response': 'User data inserted successfully.'}, 201
             else:
                 return {'error': 'Error creating user.'}, 404
+        else:
+            return {'error': 'Email is already in use.'}, 404
 
-    def patch(self, new_user_info):
+    def patch(self):
         '''
         Updates the given fields of a user's information.
 
