@@ -59,11 +59,11 @@ class User(Resource):
             print(user_created)
 
             if(user_created == True):
-                return {'response': 'User data inserted successfully.'}, 201
+                return {'response': 'User successfully created.'}, 201
             else:
                 return {'error': 'Error creating user.'}, 404
         else:
-            return {'error': 'Email is already in use.'}, 404
+            return {'error': 'Email is already in use.'}, 400
 
     def patch(self):
         '''
@@ -78,14 +78,20 @@ class User(Resource):
         -------
 
         '''
-        user_exists = True              # TODO: check that a specific user exists in DB
+        new_user_info = request.get_json(force=True)
+        email = new_user_info['email']
 
-        if (user_exists == False):
-            return {"error": "User could not be found."}, 404
+        # check whether or not a specific user exists in DB
+        existing_user = db.get_user(email)
+
+        if (existing_user is None):
+            return {'error': 'User could not be found.'}, 404
         else:
-            for key in new_user_info:
-                print(key)              # TODO: update the given fields in the DB
-            return {'response': 'User info successfully changed.'}, 200
+            user_updated = db.update_user(new_user_info)
+            if (user_updated):
+                return {'response': 'User info successfully changed.'}, 200
+            else:
+                return {'error': "There was an error trying to update the user's info"}, 400
 
     def delete(self, email):
         '''
@@ -100,11 +106,17 @@ class User(Resource):
         -------
 
         '''
-        user_exists = True              # TODO: check that a specific user exists in DB
-        if (user_exists == False):
-            return {"error": "User could not be found."}, 404
+        # check whether or not a specific user exists in DB
+        existing_user = db.get_user(email)
+
+        if (existing_user is None):
+            return {'error': 'User could not be found.'}, 404
         else:
-            return 204                  # TODO: remove specified user from DB
+            user_deleted = db.delete_user(email)
+            if (user_deleted):
+                return 204
+            else:
+                return {'error': 'Error removing user from platform.'}, 400
 
 # ----------------------------------------------------------------------------------
 # API Routes
