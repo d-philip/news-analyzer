@@ -7,6 +7,10 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('ec500-users')
 
+# ----------------------------------------------------------------------------------
+# User DB Functions
+# ----------------------------------------------------------------------------------
+
 def create_user(user_info):
     try:
         new_user = {

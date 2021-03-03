@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
-import db_functions as db
+import db_functions.user_db as user_db
 import json
 
 # ----------------------------------------------------------------------------------
@@ -26,8 +26,8 @@ class User(Resource):
         -------
 
         '''
-        # retrieve user info from DB
-        user = db.get_user(email)
+        # retrieve user info from user db
+        user = user_db.get_user(email)
 
         if (user is None):
             return {'error': 'User could not be found.'}, 404
@@ -50,12 +50,12 @@ class User(Resource):
         user_info = request.get_json(force=True)
         email = user_info['email']
 
-        # check whether or not a specific user exists in DB
-        existing_user = db.get_user(email)
+        # check whether or not a specific user exists in user db
+        existing_user = user_db.get_user(email)
 
         if (existing_user is None):
             # add the 'new_user' object to the database
-            user_created = db.create_user(user_info)
+            user_created = user_db.create_user(user_info)
             print(user_created)
 
             if(user_created == True):
@@ -81,13 +81,13 @@ class User(Resource):
         new_user_info = request.get_json(force=True)
         email = new_user_info['email']
 
-        # check whether or not a specific user exists in DB
-        existing_user = db.get_user(email)
+        # check whether or not a specific user exists in user db
+        existing_user = user_db.get_user(email)
 
         if (existing_user is None):
             return {'error': 'User could not be found.'}, 404
         else:
-            user_updated = db.update_user(new_user_info)
+            user_updated = user_db.update_user(new_user_info)
             if (user_updated):
                 return {'response': 'User info successfully changed.'}, 200
             else:
@@ -106,13 +106,13 @@ class User(Resource):
         -------
 
         '''
-        # check whether or not a specific user exists in DB
-        existing_user = db.get_user(email)
+        # check whether or not a specific user exists in user db
+        existing_user = user_db.get_user(email)
 
         if (existing_user is None):
             return {'error': 'User could not be found.'}, 404
         else:
-            user_deleted = db.delete_user(email)
+            user_deleted = user_db.delete_user(email)
             if (user_deleted):
                 return 204
             else:

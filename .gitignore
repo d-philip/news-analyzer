@@ -3,4 +3,4 @@
 .coverage
 
 # Misc
-*/__pycache__
+**/__pycache__
