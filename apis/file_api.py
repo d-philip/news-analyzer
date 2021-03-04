@@ -22,7 +22,9 @@ class File(Resource):
 
         Parameters
         ----------
-        file_id (optional): integer
+        email : string
+            Email of a specific user.
+        file_id (optional): string
             ID of a specific file.
 
         Returns
@@ -30,19 +32,19 @@ class File(Resource):
 
         '''
         # check whether or not a specific user exists in DB
-        existing_user = get_user(email)
+        user = get_user(email)
+        if (user is None):
+            return {'error': 'User could not be found.'}, 404
 
         if (file_id is None):
-            file_list = []              # TODO: retrieve a list of a user's files from DB
+            file_list = file_db.get_file(email)
             return file_list, 200
         else:
-            file_exists = True          # TODO: check for specific file in DB
-
-            if (file_exists == False):
-                return {"error": "File could not be found."}, 404
+            file = file_db.get_file(email, file_id)
+            if (file is None):
+                return {'error': 'File could not be found.'}, 404
             else:
-                file_obj = {}           # TODO: retrieve a specific file from the DB
-                return file_obj, 200
+                return file, 200
 
     def post(self, email):
         '''
@@ -50,13 +52,19 @@ class File(Resource):
 
         Parameters
         ----------
-        file_info : JSON object
-            File's information, including its name, source, and extension or url.
+        email : string
+            Email of a specific user.
+        request.files : multipart/form-data
+            - file : Bytes or file-like object
+                File to be updated.
+            - source: string
+                Source of the file; either 'disk' or 'url'.
 
         Returns
         -------
 
         '''
+        # check whether or not a specific user exists in DB
         user = get_user(email)
         if (user is None):
             return {'error': 'User could not be found.'}, 404
@@ -113,9 +121,9 @@ class File(Resource):
         file_exists = True              # TODO: check that a specific file exists in DB
 
         if (file_exists == False):
-            return {"error": "File could not be found."}, 404
+            return {'error': 'File could not be found.'}, 404
         else:
-            for key in new_file_info:
+            for key in request['new_file_info']:
                 print(key)              # TODO: update the given fields in the DB
                                         # TODO: update the 'modified_time' field of the file
             return {'response': 'File info successfully changed.'}, 200
@@ -144,7 +152,7 @@ class File(Resource):
 # API Routes
 # ----------------------------------------------------------------------------------
 api.add_resource(File, '/users/<string:email>/files/', endpoint='files')
-api.add_resource(File, '/users/<string:email>/files/<uuid:file_id>', endpoint='file')
+api.add_resource(File, '/users/<string:email>/files/<string:file_id>', endpoint='file')
 
 if __name__ == '__main__':
     app.run(debug=True)
