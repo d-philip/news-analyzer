@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
-import db_functions.user_db as user_db
+import db_functions.user_functions as user_db
 import json
 
 # ----------------------------------------------------------------------------------
