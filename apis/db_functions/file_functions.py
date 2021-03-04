@@ -5,6 +5,8 @@ import boto3
 from boto3.dynamodb.conditions import Key
 
 dynamodb = boto3.resource('dynamodb')
+s3 = boto3.resource('s3')
+bucket = s3.Bucket('ec500-news')
 table = dynamodb.Table('ec500-users')
 
 # ----------------------------------------------------------------------------------
@@ -28,13 +30,18 @@ def upload_file(email, file_info):
     elif (new_file[0]["file_source"] == "url"):
         new_file[0]["file_url"] = file_info["url"]
 
-    # try:
-    resp = table.update_item(
-        Key={"email": email},
-        UpdateExpression="set #F = list_append(#F, :f)",
-        ExpressionAttributeNames={"#F": "files"},
-        ExpressionAttributeValues={":f": new_file},
-    )
-    return True
-    # except:
-    #     return False
+    try:
+        # reformat the email because the '@' character requires special handling
+        email_split = email.split('@')
+        upload_path = email_split[0] + '_' + email_split[1] + '/' + file_info["file_name"]
+        bucket.Object(upload_path).put(Body=file_info["raw_file"])
+
+        db_resp = table.update_item(
+            Key={"email": email},
+            UpdateExpression="set #F = list_append(#F, :f)",
+            ExpressionAttributeNames={"#F": "files"},
+            ExpressionAttributeValues={":f": new_file},
+        )
+        return True
+    except:
+        return False
