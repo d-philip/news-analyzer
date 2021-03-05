@@ -66,7 +66,7 @@ def get_file(email, file_id=None):
 
 def update_file(email, file_id, updated_info):
     # define which fields the user should be unable to edit
-    IMMUTABLE_KEYS = ['file_id', 'file_source', 'modified_time', 'upload_time', 'file_extension']
+    IMMUTABLE_KEYS = ['file_id', 'file_source', 'upload_time', 'file_extension']
 
     # initialize variables needed for update_item()
     attr_vals = {}
@@ -75,6 +75,7 @@ def update_file(email, file_id, updated_info):
     i = 0
 
     try:
+        updated_info["modified_time"] = str(datetime.now())
         keys = updated_info.keys()
 
         # create update expression and expression attribute values object
