@@ -19,7 +19,7 @@ def create_user(user_info):
                     "last_name": user_info["last_name"],
                     "occupation": user_info["occupation"],
                     "created": str(datetime.now()),
-                    "files": []
+                    "files": {}
                     }
 
         table.put_item(Item=new_user)

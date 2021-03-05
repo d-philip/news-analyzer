@@ -25,7 +25,7 @@ class File(Resource):
         email : string
             Email of a specific user.
         file_id (optional): string
-            ID of a specific file.
+            UUID of a specific file.
 
         Returns
         -------
@@ -104,29 +104,35 @@ class File(Resource):
 
     def patch(self, email, file_id):
         '''
-        Updates the given fields of a file's information.
+        Updates the given fields of a file's metadata.
 
         Parameters
         ----------
-        file_id : integer
-            ID of a specific file.
-        new_file_info : JSON object
-            The fields and updated values that are going to overwrite a file's existing information.
+        file_id : string
+            UUID of a specific file.
+        request.new_file_info : JSON object
+            The fields to be updated and their new values.
 
         Returns
         -------
 
         '''
-        user_exists = True              # TODO: check that a specific user exists in DB
-        file_exists = True              # TODO: check that a specific file exists in DB
+        # check whether or not a specific user exists in DB
+        user = get_user(email)
+        if (user is None):
+            return {'error': 'User could not be found.'}, 404
 
-        if (file_exists == False):
+        file = file_db.get_file(email, file_id)
+
+        if (file is None):
             return {'error': 'File could not be found.'}, 404
         else:
-            for key in request['new_file_info']:
-                print(key)              # TODO: update the given fields in the DB
-                                        # TODO: update the 'modified_time' field of the file
-            return {'response': 'File info successfully changed.'}, 200
+            new_file_info = request.get_json(force=True)
+            file_updated = file_db.update_file(email, file_id, new_file_info)
+            if file_updated:
+                return {'response': 'File info successfully changed.'}, 200
+            else:
+                return {'error': 'Error updating file.'}, 500
 
     def delete(self, email, file_id):
         '''
