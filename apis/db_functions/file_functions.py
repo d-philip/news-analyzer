@@ -34,8 +34,8 @@ def upload_file(email, file_info):
     try:
         # reformat the email because the '@' character requires special handling
         email_split = email.split('@')
-        upload_path = email_split[0] + '_' + email_split[1] + '/' + file_id
-        bucket.Object(upload_path).put(Body=file_info["raw_file"])
+        file_path = email_split[0] + '_' + email_split[1] + '/' + file_id + '.pdf'
+        bucket.Object(file_path).put(Body=file_info["raw_file"])
 
         db_resp = table.update_item(
             Key={"email": email},
@@ -97,6 +97,27 @@ def update_file(email, file_id, updated_info):
             UpdateExpression=update_expr,
             ExpressionAttributeNames={"#id": file_id},
             ExpressionAttributeValues=attr_vals,
+        )
+        return True
+    except:
+        return False
+
+def delete_file(email, file_id):
+    try:
+        email_split = email.split('@')
+        file_path = email_split[0] + '_' + email_split[1] + '/' + file_id + '.pdf'
+
+        s3_resp = bucket.delete_objects(
+            Delete={
+                'Objects': [{
+                    'Key': file_path
+                }]
+            })
+
+        db_resp = table.update_item(
+            Key={'email': email},
+            UpdateExpression="remove files.#id",
+            ExpressionAttributeNames={"#id": file_id},
         )
         return True
     except:

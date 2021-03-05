@@ -34,7 +34,8 @@ def generateKeywords(text):
     nlp_api_instance = nlp_api_url + nlp_api_key
 
     # TODO: check that token is valid
-    req_url = 'http://localhost:5000/users/' + r.form['email'] + '/files/' + r.form['file_id']
+    req_data = request.get_json(force=True)
+    req_url = 'http://localhost:5000/users/' + req_data['email'] + '/files/' + req_data['file_id']
     get_res = r.get(req_url)
 
     if get_res.status_code == 200:

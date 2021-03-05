@@ -140,19 +140,30 @@ class File(Resource):
 
         Parameters
         ----------
-        file_id : integer
-            ID of a specific file.
+        email : string
+            Email of a specific user.
+        file_id : string
+            UUID of a specific file.
 
         Returns
         -------
 
         '''
-        user_exists = True              # TODO: check that a specific user exists in DB
-        file_exists = True              # TODO: check that a specific file exists in DB
-        if (file_exists == False):
-            return {"error": "File could not be found."}, 404
+        # check whether or not a specific user exists in DB
+        user = get_user(email)
+        if (user is None):
+            return {'error': 'User could not be found.'}, 404
+
+        file = file_db.get_file(email, file_id)
+
+        if (file is None):
+            return {'error': 'File could not be found.'}, 404
         else:
-            return 204                  # TODO: remove specified file from DB
+            file_deleted = file_db.delete_file(email, file_id)
+            if file_deleted:
+                return 204
+            else:
+                return {'error': 'Error deleting file.'}, 500
 
 # ----------------------------------------------------------------------------------
 # API Routes
