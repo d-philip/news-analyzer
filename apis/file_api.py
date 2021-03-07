@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
 import requests as r
+import db_functions.log_config as log_config
 import logging
 import db_functions.file_functions as file_db
 from db_functions.user_functions import get_user
@@ -14,6 +15,7 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
+log_config.setup('file_api.log')
 
 class File(Resource):
     def get(self, email, file_id=None):

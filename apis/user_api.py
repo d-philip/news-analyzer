@@ -1,6 +1,8 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
+import db_functions.log_config as log_config
+import logging
 import db_functions.user_functions as user_db
 import json
 
@@ -11,6 +13,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
+log_config.setup('user_api.log')
 
 class User(Resource):
     def get(self, email):
