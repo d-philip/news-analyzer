@@ -1,3 +1,4 @@
+import db_functions.log_config as log_config
 import logging
 from datetime import datetime
 from string import ascii_lowercase
@@ -5,6 +6,7 @@ import uuid
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 
+log_config.setup('file_api.log')
 dynamodb = boto3.resource('dynamodb')
 s3 = boto3.resource('s3')
 bucket = s3.Bucket('ec500-news')
@@ -45,6 +47,7 @@ def upload_file(email, file_info):
         )
         return True
     except:
+        logging.exception("Exception occurred.")
         return False
 
 def get_file(email, file_id=None):
@@ -62,6 +65,7 @@ def get_file(email, file_id=None):
             req_file = files_list[file_id]
             return req_file
         except:
+            logging.exception("Exception occurred")
             return None
 
 def update_file(email, file_id, updated_info):
@@ -101,6 +105,7 @@ def update_file(email, file_id, updated_info):
         )
         return True
     except:
+        logging.exception("Exception occurred")
         return False
 
 def delete_file(email, file_id):
@@ -122,4 +127,5 @@ def delete_file(email, file_id):
         )
         return True
     except:
+        logging.exception("Exception occurred")
         return False

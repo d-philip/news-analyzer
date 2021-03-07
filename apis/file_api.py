@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
 import requests as r
+import logging
 import db_functions.file_functions as file_db
 from db_functions.user_functions import get_user
 from datetime import datetime
@@ -83,6 +84,7 @@ class File(Resource):
             try:
                 file_extension = split_filename[1]
             except:
+                logging.exception("Exception occurred.")
                 return {'error': 'Error with filename sent in request'}, 400
 
             if (source == 'disk'):

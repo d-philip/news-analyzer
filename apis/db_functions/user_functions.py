@@ -1,9 +1,11 @@
+import db_functions.log_config as log_config
 import logging
 from datetime import datetime
 from string import ascii_lowercase
 import boto3
 from boto3.dynamodb.conditions import Key
 
+log_config.setup('user_api.log')
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('ec500-users')
 
@@ -26,6 +28,7 @@ def create_user(user_info):
         return True
 
     except:
+        logging.exception("Exception occurred.")
         return False
 
 def get_user(email):
@@ -68,13 +71,13 @@ def update_user(updated_info):
         return True
 
     except:
-        raise
+        logging.exception("Exception occurred.")
         return False
 
 def delete_user(email):
     try:
         resp = table.delete_item(Key={'email': email})
         return True
-
     except:
+        logging.exception("Exception occurred.")
         return False
