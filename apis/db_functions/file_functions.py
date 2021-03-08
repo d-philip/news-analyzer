@@ -1,4 +1,5 @@
 import logging
+import requests
 from datetime import datetime
 from string import ascii_lowercase
 import uuid
@@ -32,17 +33,24 @@ def upload_file(email, file_info):
         new_file["file_url"] = file_info["url"]
 
     try:
-        # reformat the email because the '@' character requires special handling
-        email_split = email.split('@')
-        file_path = email_split[0] + '_' + email_split[1] + '/' + file_id + '.pdf'
-        bucket.Object(file_path).put(Body=file_info["raw_file"])
-
         db_resp = table.update_item(
             Key={"email": email},
             UpdateExpression="set files.#id = :f",
             ExpressionAttributeNames={"#id": file_id},
             ExpressionAttributeValues={":f": new_file},
         )
+
+        nlp_api_url = 'http://127.0.0.1:7000/extractText'
+        resp = requests.post(nlp_api_url, files={'file': file_info["raw_file"], 'email': (None, email), 'file_id': (None, file_id)})
+
+        if (resp.status_code != 200):
+            return None
+
+        # reformat the email because the '@' character requires special handling
+        email_split = email.split('@')
+        file_path = email_split[0] + '_' + email_split[1] + '/' + file_id + '.pdf'
+        bucket.Object(file_path).put(Body=file_info["raw_file"])
+
         return True
     except:
         logging.exception("Exception occurred.")
@@ -61,6 +69,9 @@ def get_file(email, file_id=None):
     else:
         try:
             req_file = files_list[file_id]
+            # email_split = email.split('@')
+            # file_path = email_split[0] + '_' + email_split[1] + '/' + file_id + '.pdf'
+            # raw_file = bucket.Object(file_path).get()['Body'].read()
             return req_file
         except:
             logging.exception("Exception occurred")
