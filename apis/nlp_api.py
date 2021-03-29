@@ -89,13 +89,12 @@ def generateKeywords():
     -------
 
     '''
-    nlp_api_key = ''
-    nlp_api_url = ''
-    nlp_api_instance = nlp_api_url + nlp_api_key
+    if ('email' not in request.form):
+        return {'error': 'No email sent with the request.'}, 400
+    if ('file_id' not in request.form):
+        return {'error': 'No file ID sent with the request.'}, 400
 
-    # TODO: check that token is valid
-    req_data = request.get_json(force=True)
-    req_url = api_url['file_api'] + 'users/' + req_data['email'] + '/files/' + req_data['file_id']
+    req_url = api_url['file_api'] + 'users/' + request.form['email'] + '/files/' + request.form['file_id']
     get_res = r.get(req_url)
     get_res_json = get_res.json()
 
@@ -105,14 +104,18 @@ def generateKeywords():
         if len(file_text) < 1:
             return {'error': 'The text of the chosen file could not be retrieved, so no keywords could be generated'}, 400
         else:
-            # keywords = nlp_api_instance.keywords(nlp_api_url, nlp_api_key, text)
-            keywords = []
-            patch_res = r.patch(req_url, json={'file_keywords': keywords})
+            keywords = nlp_func.generate_keywords(file_text)
 
-            if patch_res.status_code == 200:
-                return {'response': 'Keywords successfully generated and saved.'}, 200
+            if (keywords is None):
+                return {'error': "Error generating document's keywords."}, 500
             else:
-                return patch_res.json(), patch_res.status_code
+                # update the document's keywords in the database
+                patch_res = r.patch(req_url, json={'file_keywords': keywords})
+
+                if patch_res.status_code == 200:
+                    return {'response': 'Keywords successfully generated and saved.'}, 200
+                else:
+                    return patch_res.json(), patch_res.status_code
     else:
         return get_res_json, get_res.status_code
 
@@ -132,6 +135,11 @@ def analyzeSentiment():
     -------
 
     '''
+    if ('email' not in request.form):
+        return {'error': 'No email sent with the request.'}, 400
+    if ('file_id' not in request.form):
+        return {'error': 'No file ID sent with the request.'}, 400
+
     req_url = api_url['file_api'] + 'users/' + request.form['email'] + '/files/' + request.form['file_id']
 
     get_res = r.get(req_url)

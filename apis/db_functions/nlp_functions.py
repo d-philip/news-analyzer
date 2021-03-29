@@ -33,9 +33,24 @@ def analyze_sentiment(text):
         type_ = language_v1.Document.Type.PLAIN_TEXT
         document = {"content": text, "type_": type_}
         encoding_type = language_v1.EncodingType.UTF8
-        sentiment_resp = nlp_client.analyze_sentiment(request = {'document': document, 'encoding_type': encoding_type})
-        sentiment = sentiment_resp.document_sentiment.score
+        client_resp = nlp_client.analyze_sentiment(request = {'document': document, 'encoding_type': encoding_type})
+        sentiment = client_resp.document_sentiment.score
         return sentiment
+    except:
+        logging.exception("Exception occurred.")
+        return None
+
+def generate_keywords(text):
+    try:
+        type_ = language_v1.Document.Type.PLAIN_TEXT
+        document = {"content": text, "type_": type_}
+        encoding_type = language_v1.EncodingType.UTF8
+        client_resp = nlp_client.analyze_entities(request = {'document': document, 'encoding_type': encoding_type})
+        keywords = []
+        for word in client_resp.entities:
+            keywords.append(word.name)      # TODO: narrow down the list of keywords that get returned
+        print("Keywords: ", keywords)
+        return keywords
     except:
         logging.exception("Exception occurred.")
         return None
