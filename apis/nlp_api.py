@@ -3,23 +3,22 @@ from flask_cors import CORS
 import requests as r
 import json
 import db_functions.log_config as log_config
+import db_functions.nlp_functions as nlp_func
+from config import api_url
 import logging
-from io import StringIO
-
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfdocument import PDFDocument
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.pdfpage import PDFPage
-from pdfminer.pdfparser import PDFParser
 
 # ----------------------------------------------------------------------------------
 # Text Analysis/NLP API
 # ----------------------------------------------------------------------------------
 
+# Setup Flask app
 app = Flask(__name__)
 CORS(app)
-log_config.setup('nlp_api.log')
+
+# Setup logging
+log_folder = 'logs/'    # folder must be created if it does not exist
+log_filename = 'nlp_api.log'
+log_config.setup(log_folder + log_filename)
 
 @app.route('/extractText', methods=['POST'])
 def extractText():
@@ -55,23 +54,16 @@ def extractText():
         return {'error': 'Error reading request data.'}, 500
 
     try:    # TODO: check for file extension to determine extraction method
-        parser = PDFParser(sent_file)
-        pdf_doc = PDFDocument(parser)
-        rsrcmgr = PDFResourceManager()
-        output_string = StringIO()
-        device = TextConverter(rsrcmgr, output_string, laparams=LAParams())
-        interpreter = PDFPageInterpreter(rsrcmgr, device)
-        for page in PDFPage.create_pages(pdf_doc):
-            interpreter.process_page(page)
-        file_text = output_string.getvalue()
+        file_text = nlp_func.extract_text(sent_file)
     except:
         logging.exception("Exception occurred.")
         return {'error': 'Error extracting text from sent file.'}, 500
 
     try:
-        file_api_url = 'http://127.0.0.1:5000/users/' + email + '/files/' + file_id
-        print(file_id)
-        resp = r.patch(file_api_url, json={'file_content': file_text})
+        file_api_url = api_url['file_api'] + 'users/' + email + '/files/' + file_id
+        patch_resp = r.patch(file_api_url, json={'file_content': file_text})
+        if (patch_resp.status_code != 200):
+            return patch_resp.json()
     except:
         logging.exception("Exception occurred. Response: " + resp.text)
         return {'error': "Error saving the file's text to the database."}, 500
@@ -103,7 +95,7 @@ def generateKeywords():
 
     # TODO: check that token is valid
     req_data = request.get_json(force=True)
-    req_url = 'http://localhost:5000/users/' + req_data['email'] + '/files/' + req_data['file_id']
+    req_url = api_url['file_api'] + 'users/' + req_data['email'] + '/files/' + req_data['file_id']
     get_res = r.get(req_url)
     get_res_json = get_res.json()
 
@@ -115,14 +107,14 @@ def generateKeywords():
         else:
             # keywords = nlp_api_instance.keywords(nlp_api_url, nlp_api_key, text)
             keywords = []
-            patch_res = r.patch(req_url, data={'file_keywords': keywords})
+            patch_res = r.patch(req_url, json={'file_keywords': keywords})
 
             if patch_res.status_code == 200:
                 return {'response': 'Keywords successfully generated and saved.'}, 200
             else:
-                return patch_res.json()
+                return patch_res.json(), patch_res.status_code
     else:
-        return get_res_json
+        return get_res_json, get_res.status_code
 
 @app.route('/analyzeSentiment', methods=['POST'])
 def analyzeSentiment():
@@ -131,9 +123,6 @@ def analyzeSentiment():
 
     Parameters
     ----------
-    token : string
-        Authentication token of the client.
-        Tokens should be passed as an HTTP Authorization header or as a POST parameter.
     file_id : integer
         ID of a specific file.
     email : string
@@ -143,31 +132,33 @@ def analyzeSentiment():
     -------
 
     '''
-    nlp_api_key = ''
-    nlp_api_url = ''
-    nlp_api_instance = nlp_api_url + nlp_api_key
+    req_url = api_url['file_api'] + 'users/' + request.form['email'] + '/files/' + request.form['file_id']
 
-    # TODO: check that token is valid
-    req_url = 'http://localhost:5000/users/' + r.form['email'] + '/files/' + r.form['file_id']
     get_res = r.get(req_url)
+    get_res_json = get_res.json()
 
     if get_res.status_code == 200:
-        get_res_json = get_res.json()
         file_text = get_res_json['file_content']
 
         if len(file_text) < 1:
             return {'error': 'The text of the chosen file could not be retrieved, so the sentiment could not be analyzed.'}, 400
         else:
-            # sentiment = nlp_api_instance.sentiment(nlp_api_url, nlp_api_key, text)
-            sentiment = []
-            patch_res = r.patch(req_url, data={'file_sentiment': sentiment})
+            # get the sentiment of the file content
+            sentiment = nlp_func.analyze_sentiment(file_text)
 
-            if patch_res.status_code == 200:
-                return {'response': 'Sentiment successfully analyzed and saved.'}, 200
+            if (sentiment is None):
+                return {'error': "Error analyzing document's sentiment."}, 500
             else:
-                return patch_res.json()
+                # update the document's sentiment in the database
+                patch_res = r.patch(req_url, json={'file_sentiment': str(sentiment)})
+
+                if patch_res.status_code == 200:
+                    return {'response': 'Sentiment successfully analyzed and saved.'}, 200
+                else:
+                    return patch_res.json(), patch_res.status_code
+
     else:
-        return get_res_json
+        return get_res_json, get_res.status_code
 
 if __name__ == '__main__':
     app.run(debug=True)

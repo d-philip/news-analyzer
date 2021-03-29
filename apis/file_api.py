@@ -15,7 +15,9 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
-log_config.setup('file_api.log')
+log_folder = 'logs/'
+log_filename = 'file_api.log'
+log_config.setup(log_folder + log_filename)
 
 class File(Resource):
     def get(self, email, file_id=None):
