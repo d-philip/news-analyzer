@@ -40,7 +40,7 @@ def upload_file(email, file_info):
             ExpressionAttributeValues={":f": new_file},
         )
 
-        nlp_api_url = 'http://127.0.0.1:7000/extractText'
+        nlp_api_url = 'http://54.91.38.146:6060/extractText'
         resp = requests.post(nlp_api_url, files={'file': file_info["raw_file"], 'email': (None, email), 'file_id': (None, file_id)})
 
         if (resp.status_code != 200):

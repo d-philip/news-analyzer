@@ -59,7 +59,6 @@ class User(Resource):
         if (existing_user is None):
             # add the 'new_user' object to the database
             user_created = user_db.create_user(user_info)
-            print(user_created)
 
             if(user_created == True):
                 return {'response': 'User successfully created.'}, 201

@@ -65,7 +65,7 @@ def extractText():
         if (patch_resp.status_code != 200):
             return patch_resp.json()
     except:
-        logging.exception("Exception occurred. Response: " + resp.text)
+        logging.exception("Exception occurred. Response: " + patch_resp.text)
         return {'error': "Error saving the file's text to the database."}, 500
 
     return {'response': 'Text successfully extracted and uploaded.'}, 200

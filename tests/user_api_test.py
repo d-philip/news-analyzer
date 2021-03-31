@@ -1,6 +1,7 @@
 import requests as r
+from test_config import *
 
-url = "http://54.91.38.146:8080/users/"
+url = api_url['user_api'] + 'users/'
 
 def test_post_user():
     new_user = {
