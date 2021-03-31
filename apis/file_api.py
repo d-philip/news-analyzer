@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
+import os
 import requests as r
 import db_functions.log_config as log_config
 import logging
@@ -15,7 +16,11 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
+
+# Setup logging
 log_folder = 'logs/'
+if (os.path.isdir(log_folder) == False):
+    os.mkdir(log_folder)
 log_filename = 'file_api.log'
 log_config.setup(log_folder + log_filename)
 

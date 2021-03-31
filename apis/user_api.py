@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
+import os
 import db_functions.log_config as log_config
 import logging
 import db_functions.user_functions as user_db
@@ -13,7 +14,13 @@ import json
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
-log_config.setup('user_api.log')
+
+# Setup logging
+log_folder = 'logs/'
+if (os.path.isdir(log_folder) == False):
+    os.mkdir(log_folder)
+log_filename = 'user_api.log'
+log_config.setup(log_folder + log_filename)
 
 class User(Resource):
     def get(self, email):

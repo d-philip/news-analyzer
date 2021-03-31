@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 import requests as r
+import os
 import json
 import db_functions.log_config as log_config
 import db_functions.nlp_functions as nlp_func
@@ -16,7 +17,9 @@ app = Flask(__name__)
 CORS(app)
 
 # Setup logging
-log_folder = 'logs/'    # folder must be created if it does not exist
+log_folder = 'logs/'
+if (os.path.isdir(log_folder) == False):
+    os.mkdir(log_folder)
 log_filename = 'nlp_api.log'
 log_config.setup(log_folder + log_filename)
 
