@@ -4,3 +4,5 @@
 
 # Misc
 **/__pycache__
+*.pdf
+*.log
