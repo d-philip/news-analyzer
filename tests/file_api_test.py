@@ -43,3 +43,23 @@ def test_post_file():
     assert resp6.status_code == 400
 
     r.delete(user_api_url + 'johndoe@gmail.com')
+
+def test_get_file():
+    file_ID1 = 'd17904d4-ca5e-4e14-ac51-83d6ef90ace7'
+    file_ID2 = 'bebc101f-4b25-4aa2-9c97-384035825f4d'
+
+    resp1 = r.get(file_api_url + 'ec500test@gmail.com/files/' + file_ID1)
+    resp1_json = resp1.json()
+    assert resp1_json['file_name'] == 'Salmon and Couscous Salad Recipe - NYT Cooking.pdf'
+    assert resp1_json['file_extension'] == 'pdf'
+    assert resp1_json['file_source'] == 'disk'
+    assert resp1_json['modified_time'] == '2021-04-04 23:33:33.172751'
+    assert resp1_json['upload_time'] == '2021-04-04 23:33:32.946033'
+
+    resp2 = r.get(file_api_url + 'ec500test@gmail.com/files/' + file_ID2)
+    assert resp2.json() == {'error': 'File could not be found.'}
+    assert resp2.status_code == 404
+
+    resp3 = r.get(file_api_url + 'janedoe@gmail.com/files/' + file_ID1)
+    assert resp3.json() == {'error': 'User could not be found.'}
+    assert resp3.status_code == 404
