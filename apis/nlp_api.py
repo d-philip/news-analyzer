@@ -3,8 +3,8 @@ from flask_cors import CORS
 import requests as r
 import os
 import json
-import db_functions.log_config as log_config
-import db_functions.nlp_functions as nlp_func
+import api_functions.log_config as log_config
+import api_functions.nlp_functions as nlp_func
 from config import api_url
 import logging
 

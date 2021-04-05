@@ -8,4 +8,4 @@ def setup(log_filename):
                     datefmt='%d-%b-%y %H:%M:%S'
                     )
 
-    logging.info("Logger for 'db_functions' module initialized.")
+    logging.info("Logger for 'api_functions' module initialized.")

@@ -3,10 +3,10 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 import os
 import requests as r
-import db_functions.log_config as log_config
+import api_functions.log_config as log_config
 import logging
-import db_functions.file_functions as file_db
-from db_functions.user_functions import get_user
+import api_functions.file_functions as file_db
+from api_functions.user_functions import get_user
 from datetime import datetime
 
 # ----------------------------------------------------------------------------------

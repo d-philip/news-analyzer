@@ -2,9 +2,9 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
 import os
-import db_functions.log_config as log_config
+import api_functions.log_config as log_config
 import logging
-import db_functions.user_functions as user_db
+import api_functions.user_functions as user_db
 import json
 
 # ----------------------------------------------------------------------------------
