@@ -49,7 +49,6 @@ def generate_keywords(text):
         keywords = []
         for word in client_resp.entities:
             keywords.append(word.name)      # TODO: narrow down the list of keywords that get returned
-        print("Keywords: ", keywords)
         return keywords
     except:
         logging.exception("Exception occurred.")
