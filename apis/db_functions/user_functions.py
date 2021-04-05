@@ -38,6 +38,8 @@ def get_user(email):
         return None
 
 def update_user(updated_info):
+    MUTABLE_KEYS = ['occupation', 'first_name', 'last_name']
+
     try:
         keys = updated_info.keys()
         attr_vals = {}
@@ -47,7 +49,7 @@ def update_user(updated_info):
 
         # create update expression and expression attribute values object
         for key in keys:
-            if (key == 'created' or key == 'email'):
+            if (key not in MUTABLE_KEYS):
                 i += 1
                 continue
             attr_str = ':' + ascii_lowercase[i]

@@ -79,7 +79,7 @@ def get_file(email, file_id=None):
 
 def update_file(email, file_id, updated_info):
     # define which fields the user should be unable to edit
-    IMMUTABLE_KEYS = ['file_id', 'file_source', 'upload_time', 'file_extension']
+    MUTABLE_KEYS = ['file_content', 'file_keywords', 'file_name', 'file_sentiment', 'modified_time']
 
     # initialize variables needed for update_item()
     attr_vals = {}
@@ -93,7 +93,7 @@ def update_file(email, file_id, updated_info):
 
         # create update expression and expression attribute values object
         for key in keys:
-            if (key in IMMUTABLE_KEYS):
+            if (key not in MUTABLE_KEYS):
                 i += 1
                 continue
             attr_str = ':' + ascii_lowercase[i]
