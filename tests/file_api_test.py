@@ -89,6 +89,7 @@ def test_delete_file():
     file_id2 = 'bebc101f-4b25-4aa2-9c97-384035825f4d'
     files = {'file': open(document, 'rb'), 'source': (None, 'disk')}
     r.post(file_api_url + 'ec500test@gmail.com/files/', files=files)
+
     get_resp = r.get(file_api_url + 'ec500test@gmail.com/files/')
     get_resp_json = get_resp.json()
     for file_id, file_info in get_resp_json.items():
