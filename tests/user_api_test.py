@@ -1,11 +1,13 @@
 import requests as r
 from test_config import *
+from random import randint
 
 url = api_url['user_api'] + 'users/'
+email = 'johndoe' + str(randint(0,100)) + '@gmail.com'
 
 def test_post_user():
     new_user = {
-                  "email": "johndoe@gmail.com",
+                  "email": email,
                   "first_name": "John",
                   "last_name": "Doe",
                   "occupation": "baker"
@@ -20,9 +22,9 @@ def test_post_user():
     assert resp2.status_code == 400
 
 def test_get_user():
-    resp1 = r.get(url + 'johndoe@gmail.com')
+    resp1 = r.get(url + email)
     resp1_json = resp1.json()
-    assert resp1_json['email'] == 'johndoe@gmail.com'
+    assert resp1_json['email'] == email
     assert resp1_json['first_name'] == 'John'
     assert resp1_json['last_name'] == 'Doe'
     assert resp1_json['occupation'] == 'baker'
@@ -35,7 +37,7 @@ def test_get_user():
 
 def test_patch_user():
     new_info1 = {
-        'email': 'johndoe@gmail.com',
+        'email': email,
         'occupation': 'waiter'
     }
     new_info2 = {
@@ -52,9 +54,9 @@ def test_patch_user():
     assert resp2.status_code == 404
 
 def test_delete_user():
-    resp1 = r.delete(url + 'johndoe@gmail.com')
+    resp1 = r.delete(url + email)
     assert resp1.json() == 204
 
-    resp2 = r.delete(url + 'johndoe@gmail.com')
+    resp2 = r.delete(url + email)
     assert resp2.json() == {'error': 'User could not be found.'}
     assert resp2.status_code == 404
