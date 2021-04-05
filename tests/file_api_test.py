@@ -1,13 +1,15 @@
 import requests as r
 from test_config import *
+from random import randint
 
 user_api_url = api_url['user_api'] + 'users/'
 file_api_url = api_url['file_api'] + 'users/'
+email = 'johndoe' + str(randint(0,100)) + '@gmail.com'
 
 def test_post_file():
     # create test user
     new_user = {
-                  "email": "johndoe@gmail.com",
+                  "email": email,
                   "first_name": "John",
                   "last_name": "Doe",
                   "occupation": "baker"
@@ -22,7 +24,7 @@ def test_post_file():
     files3 = {'source': (None, 'disk')}
     files4 = {'file': open(document2, 'rb')}
 
-    resp2 = r.post(file_api_url + 'johndoe@gmail.com/files/', files=files1)
+    resp2 = r.post(file_api_url + email + '/files/', files=files1)
     assert resp2.json() == {'response': 'File uploaded successfully'}
     assert resp2.status_code == 200
 
@@ -30,19 +32,19 @@ def test_post_file():
     assert resp3.json() == {'error': 'User could not be found.'}
     assert resp3.status_code == 404
 
-    resp4 = r.post(file_api_url + 'johndoe@gmail.com/files/', files=files2)
+    resp4 = r.post(file_api_url + email + '/files/', files=files2)
     assert resp4.json() == {'error': 'File type not supported.'}
     assert resp4.status_code == 400
 
-    resp5 = r.post(file_api_url + 'johndoe@gmail.com/files/', files=files3)
+    resp5 = r.post(file_api_url + email + '/files/', files=files3)
     assert resp5.json() == {'error': 'No file sent with the request.'}
     assert resp5.status_code == 400
 
-    resp6 = r.post(file_api_url + 'johndoe@gmail.com/files/', files=files4)
+    resp6 = r.post(file_api_url + email + '/files/', files=files4)
     assert resp6.json() == {'error': 'No source sent with the request.'}
     assert resp6.status_code == 400
 
-    r.delete(user_api_url + 'johndoe@gmail.com')
+    r.delete(user_api_url + email)
 
 def test_get_file():
     file_ID1 = 'd17904d4-ca5e-4e14-ac51-83d6ef90ace7'
