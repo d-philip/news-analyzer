@@ -74,10 +74,32 @@ def test_patch_file():
     assert resp1.json() == {'response': 'File info successfully changed.'}
     assert resp1.status_code == 200
 
-    resp2 = r.get(file_api_url + 'ec500test@gmail.com/files/' + file_ID2, json=updated_info)
+    resp2 = r.patch(file_api_url + 'ec500test@gmail.com/files/' + file_ID2, json=updated_info)
     assert resp2.json() == {'error': 'File could not be found.'}
     assert resp2.status_code == 404
 
-    resp3 = r.get(file_api_url + 'janedoe@gmail.com/files/' + file_ID1)
+    resp3 = r.patch(file_api_url + 'janedoe@gmail.com/files/' + file_ID1)
+    assert resp3.json() == {'error': 'User could not be found.'}
+    assert resp3.status_code == 404
+
+def test_delete_file():
+    document = 'tests/Wild Mushroom Tart Recipe - NYT Cooking.pdf'
+    file_id2 = 'bebc101f-4b25-4aa2-9c97-384035825f4d'
+    files = {'file': open(document, 'rb'), 'source': (None, 'disk')}
+    r.post(file_api_url + 'ec500test@gmail.com/files/', files=files)
+    get_resp = r.get(file_api_url + 'ec500test@gmail.com/files/')
+    get_resp_json = get_resp.json()
+    for file_id, file_info in get_resp_json.items():
+        if file_info['file_name'] == 'Wild Mushroom Tart Recipe - NYT Cooking.pdf':
+            file_id1 = file_id
+
+    resp1 = r.delete(file_api_url + 'ec500test@gmail.com/files/' + file_id1)
+    assert resp1.status_code == 200
+
+    resp2 = r.delete(file_api_url + 'ec500test@gmail.com/files/' + file_id2)
+    assert resp2.json() == {'error': 'File could not be found.'}
+    assert resp2.status_code == 404
+
+    resp3 = r.delete(file_api_url + 'janedoe@gmail.com/files/' + file_id1)
     assert resp3.json() == {'error': 'User could not be found.'}
     assert resp3.status_code == 404
