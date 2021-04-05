@@ -66,9 +66,9 @@ def extractText():
         file_api_url = api_url['file_api'] + 'users/' + email + '/files/' + file_id
         patch_resp = r.patch(file_api_url, json={'file_content': file_text})
         if (patch_resp.status_code != 200):
-            return patch_resp.json()
+            return patch_resp.json(), patch_resp.status_code
     except:
-        logging.exception("Exception occurred. Response: " + resp.text)
+        logging.exception("Exception occurred. Response: " + patch_resp.text)
         return {'error': "Error saving the file's text to the database."}, 500
 
     return {'response': 'Text successfully extracted and uploaded.'}, 200

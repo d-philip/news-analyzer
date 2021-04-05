@@ -5,4 +5,5 @@
 # Misc
 **/__pycache__
 *.pdf
+!tests/*.pdf
 *.log

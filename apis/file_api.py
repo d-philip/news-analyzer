@@ -91,7 +91,10 @@ class File(Resource):
             split_filename = sent_file.filename.split('.')
 
             try:
-                file_extension = split_filename[1]
+                if (len(split_filename) == 2):
+                    file_extension = split_filename[1]
+                else:
+                    raise
             except:
                 logging.exception("Exception occurred.")
                 return {'error': 'Error with filename sent in request'}, 400
