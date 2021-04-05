@@ -36,7 +36,7 @@ This API serves as the backend for a platform that allows users to upload and st
 * [Flask RESTful](https://flask-restful.readthedocs.io/en/latest/)
 * [AWS S3](https://aws.amazon.com/s3/)
 * [AWS DynamoDB](https://aws.amazon.com/dynamodb/)
-
+* [Google CLoud Natural Language](https://cloud.google.com/natural-language)
 
 
 <!-- GETTING STARTED -->
