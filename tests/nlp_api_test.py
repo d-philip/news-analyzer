@@ -47,6 +47,23 @@ def test_analyze_sentiment():
     assert resp3.json() == {'error': 'No email sent with the request.'}
     assert resp3.status_code == 400
 
-    resp2 = r.post(sentiment_url, data={'email': email})
-    assert resp2.json() == {'error': 'No file ID sent with the request.'}
-    assert resp2.status_code == 400
+    resp4 = r.post(sentiment_url, data={'email': email})
+    assert resp4.json() == {'error': 'No file ID sent with the request.'}
+    assert resp4.status_code == 400
+
+def test_generate_keywords():
+    resp1 = r.post(keyword_url, data={'email': email, 'file_id': file_ID1})
+    assert resp1.json() == {'response': 'Keywords successfully generated and saved.'}
+    assert resp1.status_code == 200
+
+    resp2 = r.post(keyword_url, data={'email': email, 'file_id': file_ID2})
+    assert resp2.json() == {'error': 'File could not be found.'}
+    assert resp2.status_code == 404
+
+    resp3 = r.post(keyword_url, data={'file_id': file_ID1})
+    assert resp3.json() == {'error': 'No email sent with the request.'}
+    assert resp3.status_code == 400
+
+    resp4 = r.post(keyword_url, data={'email': email})
+    assert resp4.json() == {'error': 'No file ID sent with the request.'}
+    assert resp4.status_code == 400
