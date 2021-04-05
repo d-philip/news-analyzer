@@ -28,12 +28,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This API serves as the backend for a platform that allows users to upload and store news articles via direct upload or URL. Text is extracted from the uploaded documents and the platform can generate keywords and analyze the sentiment of the documents.
+This API serves as the backend for a platform that allows users to upload and store news articles via direct upload or URL (_coming soon_). Text is extracted from the uploaded documents and the platform can generate keywords and analyze the sentiment of the documents.
 
 
 ### Built With
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 * [Flask RESTful](https://flask-restful.readthedocs.io/en/latest/)
 * [AWS S3](https://aws.amazon.com/s3/)
 * [AWS DynamoDB](https://aws.amazon.com/dynamodb/)
