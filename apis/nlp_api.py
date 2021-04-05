@@ -30,7 +30,10 @@ def extractText():
 
     Parameters
     ----------
-    request.data
+    request.files : multipart/form-data
+        - file : bytes or file-like object
+            File to extract text from.
+    request.form : request body key/value pairs
         - file_id : string
             UUID of a specific file.
         - email : string
@@ -38,7 +41,8 @@ def extractText():
 
     Returns
     -------
-
+    response : JSON object
+        HTTP response and status code; contains `error` field if execution failed
     '''
     if ('file' not in request.files):
         return {'error': 'No file sent with the request.'}, 400
@@ -80,17 +84,16 @@ def generateKeywords():
 
     Parameters
     ----------
-    token : string
-        Authentication token of the client.
-        Tokens should be passed as an HTTP Authorization header or as a POST parameter.
-    file_id : integer
-        ID of a specific file.
-    email : string
-        Email of a specific user.
+    request.form : request body key/value pairs
+        - file_id : string
+            UUID of a specific file.
+        - email : string
+            Email of a specific user.
 
     Returns
     -------
-
+    response : JSON object
+        HTTP response and status code; contains `error` field if execution failed
     '''
     if ('email' not in request.form):
         return {'error': 'No email sent with the request.'}, 400
@@ -129,14 +132,16 @@ def analyzeSentiment():
 
     Parameters
     ----------
-    file_id : integer
-        ID of a specific file.
-    email : string
-        Email of a specific user.
+    request.form : request body key/value pairs
+        - file_id : string
+            UUID of a specific file.
+        - email : string
+            Email of a specific user.
 
     Returns
     -------
-
+    response : JSON object
+        HTTP response and status code; contains `error` field if execution failed
     '''
     if ('email' not in request.form):
         return {'error': 'No email sent with the request.'}, 400

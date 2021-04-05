@@ -34,7 +34,8 @@ class User(Resource):
 
         Returns
         -------
-
+        response : JSON object
+            HTTP response and status code; contains `error` field if execution failed
         '''
         # retrieve user info from user db
         user = user_db.get_user(email)
@@ -50,14 +51,19 @@ class User(Resource):
 
         Parameters
         ----------
-        user_info : JSON object
-            User's information, specifically their first name, last name, and occupation.
+        request.json : application/json
+            - user_info : JSON object
+                User's information, specifically their email, first name, last name, and occupation.
 
         Returns
         -------
-
+        response : JSON object
+            HTTP response and status code; contains `error` field if execution failed
         '''
         user_info = request.get_json(force=True)
+
+        if ('email' not in user_info):
+            return {'error': 'No email sent with the request.'}, 400
         email = user_info['email']
 
         # check whether or not a specific user exists in user db
@@ -80,14 +86,19 @@ class User(Resource):
 
         Parameters
         ----------
-        new_user_info : JSON object
-            The fields and updated values that are going to overwrite a user's existing information; must include the email of the user.
+        request.json
+            - new_user_info : JSON object
+                The fields to be updated and their new values; must include the email of the user.
 
         Returns
         -------
-
+        response : JSON object
+            HTTP response and status code; contains `error` field if execution failed
         '''
         new_user_info = request.get_json(force=True)
+
+        if ('email' not in new_user_info):
+            return {'error': 'No email sent with the request.'}, 400
         email = new_user_info['email']
 
         # check whether or not a specific user exists in user db
@@ -113,7 +124,8 @@ class User(Resource):
 
         Returns
         -------
-
+        response : JSON object
+            HTTP response and status code; contains `error` field if execution failed
         '''
         # check whether or not a specific user exists in user db
         existing_user = user_db.get_user(email)

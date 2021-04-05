@@ -39,7 +39,8 @@ class File(Resource):
 
         Returns
         -------
-
+        response : JSON object
+            HTTP response and status code; contains `error` field if execution failed
         '''
         # check whether or not a specific user exists in DB
         user = get_user(email)
@@ -65,14 +66,15 @@ class File(Resource):
         email : string
             Email of a specific user.
         request.files : multipart/form-data
-            - file : Bytes or file-like object
+            - file : bytes or file-like object
                 File to be updated.
             - source: string
                 Source of the file; either 'disk' or 'url'.
 
         Returns
         -------
-
+        response : JSON object
+            HTTP response and status code; contains `error` field if execution failed
         '''
         # check whether or not a specific user exists in DB
         user = get_user(email)
@@ -124,12 +126,14 @@ class File(Resource):
         ----------
         file_id : string
             UUID of a specific file.
-        request.new_file_info : JSON object
-            The fields to be updated and their new values.
+        request.json : application/json
+            - new_file_info : JSON object
+                The fields to be updated and their new values.
 
         Returns
         -------
-
+        response : JSON object
+            HTTP response and status code; contains `error` field if execution failed
         '''
         # check whether or not a specific user exists in DB
         user = get_user(email)
@@ -161,7 +165,8 @@ class File(Resource):
 
         Returns
         -------
-
+        response : JSON object
+            HTTP response and status code; contains `error` field if execution failed
         '''
         # check whether or not a specific user exists in DB
         user = get_user(email)
