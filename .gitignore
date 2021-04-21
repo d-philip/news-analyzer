@@ -7,3 +7,4 @@
 *.pdf
 !tests/*.pdf
 *.log
+*.DS_Store
