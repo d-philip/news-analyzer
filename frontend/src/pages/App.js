@@ -8,7 +8,7 @@ export const AuthContext = React.createContext();
 
 const initialState = {
   isAuthenticated: false,
-  email: null,
+  user: null,
 };
 
 // in-app state management
@@ -19,14 +19,14 @@ const reducer = (state, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        email: action.payload,
+        user: action.payload,
       };
     case "logout":
       localStorage.clear();
       return {
         ...state,
         isAuthenticated: false,
-        email: null,
+        user: null,
       };
     default:
       return state;

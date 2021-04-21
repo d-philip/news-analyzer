@@ -13,7 +13,7 @@ export default function HomePage(){
       justify="center"
       alignItems="center"
     >
-      {state.isAuthenticated ? <div /> : <Typography variant="h6">Please login.</Typography>}
+      {state.isAuthenticated ? <p>Hello, {state.user.givenName}!</p> : <Typography variant="h6">Please login.</Typography>}
     </Grid>
   )
 }
