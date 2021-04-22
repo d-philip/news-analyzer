@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     textAlign: "center",
   },
+  appbar: {
+    backgroundColor: '#9381FF',
+  },
 }));
 
 export default function Header(){
@@ -26,7 +29,7 @@ export default function Header(){
   const authView = state.isAuthenticated ? <Logout /> : <Login /> ;
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className={classes.appbar}>
       <Toolbar variant="dense">
         <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
           <MenuIcon />
