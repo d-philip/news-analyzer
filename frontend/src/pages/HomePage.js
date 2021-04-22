@@ -3,6 +3,7 @@ import { AuthContext } from "../pages/App";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,7 +23,7 @@ export default function HomePage(){
       alignItems="center"
       className={classes.container}
     >
-      {state.isAuthenticated ? <p>Hello, {state.user.givenName}!</p> : <Typography variant="h6">Please login.</Typography>}
+      {state.isAuthenticated ? <Redirect to="/files"/> : <Typography variant="h6">Please login.</Typography>}
     </Grid>
   )
 }

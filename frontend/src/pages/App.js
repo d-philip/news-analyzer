@@ -1,9 +1,12 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import '../assets/styles/App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import HomePage from './HomePage';
+import FilePage from './FilePage';
 import Header from '../components/Header';
 import { SnackbarProvider } from 'notistack';
+import Grid from '@material-ui/core/Grid';
 
 export const AuthContext = React.createContext();
 
@@ -34,20 +37,37 @@ const reducer = (state, action) => {
   }
 };
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+  },
+}));
+
 export default function App() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+  const classes = useStyles();
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
       <SnackbarProvider maxSnack={2}>
-        <Header />
-        <Router>
-          <Switch>
-            <Route path="/">
-              <HomePage />
-            </Route>
-          </Switch>
-        </Router>
+        <Grid className={classes.root}>
+          <Header />
+          <Router>
+            <Switch>
+              <Route path="/files">
+                <FilePage />
+              </Route>
+              <Route path="/">
+                <HomePage />
+              </Route>
+            </Switch>
+          </Router>
+        </Grid>
       </SnackbarProvider>
     </AuthContext.Provider>
   );
