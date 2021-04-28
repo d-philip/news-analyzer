@@ -18,11 +18,15 @@ const initialState = {
 // in-app state management
 const reducer = (state, action) => {
   switch (action.type) {
+    case "auth":
+    return {
+      ...state,
+      isAuthenticated: true,
+    };
     case "login":
       localStorage.setItem("user", JSON.stringify(action.payload));
       return {
         ...state,
-        isAuthenticated: true,
         user: action.payload,
       };
     case "logout":
