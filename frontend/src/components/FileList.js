@@ -8,17 +8,16 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import File from './File';
+import Upload from './Upload';
 
 const useStyles = makeStyles((theme) => ({
   list: {
     width: '100%',
+    marginTop: 20,
   },
   fileGrid: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: '#E8E7FF',
     width: '95%',
   },
 }));
@@ -68,6 +67,7 @@ export default function FileList() {
           ))}
         </List>
       </Paper>
+      <Upload />
     </Grid>
   );
 }
