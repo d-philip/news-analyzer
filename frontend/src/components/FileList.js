@@ -3,13 +3,19 @@ import { AuthContext } from "../pages/App";
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import File from './File';
 
 const useStyles = makeStyles((theme) => ({
+  list: {
+    width: '100%',
+  },
   fileGrid: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: '#E8E7FF',
@@ -31,9 +37,10 @@ export default function FileList() {
         const num_files = Object.keys(res.data).length;
         if (num_files > 0) {
           enqueueSnackbar(`Loaded ${num_files} files.`, {variant: 'info'});
+          setFiles(res.data);
         }
         else {
-          enqueueSnackbar(`No files stored.`, {variant: 'info'});
+          enqueueSnackbar(`No files stored. Upload some!`, {variant: 'info'});
         }
       })
       .catch((err) => {
@@ -43,13 +50,23 @@ export default function FileList() {
 
   useEffect(() => {
     loadFiles();
-  });
+  }, []);
 
   return(
     <Grid className={classes.fileGrid}>
-      <Paper elevation={1} >
-        <p>File List</p>
-        <p>OOGA</p>
+      <Paper elevation={1}>
+        <List
+          className={classes.list}
+          component="nav"
+          subheader={
+          <ListSubheader component="div">
+            File List
+          </ListSubheader>
+        }>
+          {Object.keys(files).map(key => (
+            <File file_info={files[key]} />
+          ))}
+        </List>
       </Paper>
     </Grid>
   );
