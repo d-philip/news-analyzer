@@ -24,7 +24,6 @@ export default function Upload(){
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { state, dispatch } = React.useContext(AuthContext);
   const classes = useStyles();
-  const [selectedFile, setSelectedFile] = useState(null);
   const fileTypes = ['application/pdf'];
 
   const handleFileSelection = (event) => {
@@ -35,7 +34,6 @@ export default function Upload(){
     }
     else {
       file = event.target.files[0];
-      console.log(file);
     }
 
     if (fileTypes.includes(file.type)) {
@@ -43,13 +41,26 @@ export default function Upload(){
     }
     else {
       enqueueSnackbar('Unsupported file type.', {variant: 'error'});
+      return;
     }
   }
 
   const uploadFile = (file) => {
-    enqueueSnackbar('File successfully uploaded.', {variant: 'success'});
-  };
+    const req_url = "http://54.91.38.146:7070/users/" + state.user.email + "/files/";
+    let req_data = new FormData();
+    req_data.append("file", file);
+    req_data.append("source", (null, 'disk'));
 
+    axios.post(req_url, req_data, {headers: {'Content-Type': 'multipart/form-data'}})
+      .then((res) => {
+        console.log(res);
+        enqueueSnackbar('File successfully uploaded.', {variant: 'success'});
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar("Error uploading file. Please try again later.", {variant: 'error'})
+      });
+  };
 
   return(
     <div>
