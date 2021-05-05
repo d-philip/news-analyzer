@@ -67,7 +67,7 @@ export default function FileList() {
           ))}
         </List>
       </Paper>
-      <Upload />
+      <Upload refreshFiles={loadFiles}/>
     </Grid>
   );
 }

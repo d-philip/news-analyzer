@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Upload(){
+export default function Upload(props){
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { state, dispatch } = React.useContext(AuthContext);
   const classes = useStyles();
@@ -55,6 +55,7 @@ export default function Upload(){
       .then((res) => {
         console.log(res);
         enqueueSnackbar('File successfully uploaded.', {variant: 'success'});
+        props.refreshFiles();
       })
       .catch((err) => {
         console.log(err);
@@ -72,7 +73,7 @@ export default function Upload(){
         component="label"
       >
         Upload Files
-        <input type="file" onChange={handleFileSelection} hidden/>
+        <input type="file" onChange={(e) => handleFileSelection(e)} hidden/>
       </Button>
     < /div>
   )
