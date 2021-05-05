@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import FileMenu from './FileMenu';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -40,7 +41,8 @@ export default function File(props) {
       <Divider />
       <ListItem>
         <ListItemText button primary={file.file_name} onClick={handleOpen}/>
-        {open ? <ExpandLessIcon /> : <ExpandMoreIcon   />}
+        {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        <FileMenu />
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
