@@ -42,7 +42,7 @@ export default function File(props) {
       <ListItem>
         <ListItemText button primary={file.file_name} onClick={handleOpen}/>
         {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        <FileMenu />
+        <FileMenu file_info={file} file_id={props.file_id} refreshFiles={props.refreshFiles}/>
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>

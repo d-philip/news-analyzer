@@ -63,7 +63,7 @@ export default function FileList() {
           </ListSubheader>
         }>
           {Object.keys(files).map(key => (
-            <File file_info={files[key]} />
+            <File file_info={files[key]} file_id={key} refreshFiles={loadFiles}/>
           ))}
         </List>
       </Paper>
