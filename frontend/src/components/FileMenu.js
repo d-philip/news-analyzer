@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import DeleteDialog from './DeleteDialog';
 import AnalyzeDialog from './AnalyzeDialog';
+import RenameDialog from './RenameDialog';
 
 const useStyles = makeStyles((theme) =>  ({
 
@@ -70,7 +71,13 @@ export default function FileMenu(props) {
         file_id={props.file_id}
         refreshFiles={props.refreshFiles}
       />
-
+      <RenameDialog
+        open={renameDialogOpen}
+        handleClose={handleRenameClose}
+        file_info={file}
+        file_id={props.file_id}
+        refreshFiles={props.refreshFiles}
+      />
 
       <IconButton className={classes.moreIcon} onClick={(e) => handleClick(e)}>
         <MoreHorizIcon />

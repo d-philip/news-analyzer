@@ -42,7 +42,7 @@ export default function AnalyzeDialog(props) {
         console.log(err);
         enqueueSnackbar("Error analyzing file sentiment. Please try again later", {variant: 'error'});
       })
-      
+
       axios.post(req_url+"generateKeywords", req_data, {headers: {'Content-Type': 'multipart/form-data'}})
         .then((res) => {
           enqueueSnackbar(res.data.response, {variant: 'success'});
@@ -67,7 +67,7 @@ export default function AnalyzeDialog(props) {
         <DialogTitle id="analyze-dialog-title">{"Analyze File"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="analyze-dialog-description">
-            Would you like to perform text analysis on file "{file.file_name}"?
+            Would you like to perform text analysis on this file?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
