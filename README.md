@@ -1,5 +1,4 @@
-# EC 500 A2 HW 2
-## News Analyzer API
+# EC 500 A2 HW 2: News Analyzer API
 ---
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -23,7 +22,8 @@
   </ol>
 </details>
 
-
+## Demo
+[Link to demo](https://drive.google.com/file/d/1zh9EqGHMcadlyDGepqpGInJSMBvA7LTa/view?usp=sharing)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
