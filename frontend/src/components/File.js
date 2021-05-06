@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
   },
+  keywords: {
+    maxHeight: 200,
+    width: '100%',
+    overflow: 'auto',
+  },
 }));
 
 export default function File(props) {
@@ -61,7 +66,13 @@ export default function File(props) {
               <Typography className={classes.heading}>Keywords</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <p>{file.file_keywords}</p>
+              <List className={classes.keywords}>
+                {file.file_keywords.map(keyword => (
+                  <ListItem>
+                    <ListItemText primary={keyword} />
+                  </ListItem>
+                ))}
+              </List>
             </AccordionDetails>
           </Accordion>
 
