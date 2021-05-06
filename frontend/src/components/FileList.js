@@ -53,22 +53,24 @@ export default function FileList() {
   }, []);
 
   return(
-    <Grid className={classes.fileGrid}>
-      <Paper elevation={1}>
-        <List
-          className={classes.list}
-          component="nav"
-          subheader={
-          <ListSubheader component="div">
-            File List
-          </ListSubheader>
-        }>
-          {Object.keys(files).map(key => (
-            <File file_info={files[key]} file_id={key} refreshFiles={loadFiles}/>
-          ))}
-        </List>
-      </Paper>
+    <div>
+      <Grid className={classes.fileGrid}>
+        <Paper elevation={1}>
+          <List
+            className={classes.list}
+            component="nav"
+            subheader={
+            <ListSubheader component="div">
+              File List
+            </ListSubheader>
+          }>
+            {Object.keys(files).map(key => (
+              <File file_info={files[key]} file_id={key} refreshFiles={loadFiles}/>
+            ))}
+          </List>
+        </Paper>
+      </Grid>
       <Upload refreshFiles={loadFiles}/>
-    </Grid>
+    </div>
   );
 }

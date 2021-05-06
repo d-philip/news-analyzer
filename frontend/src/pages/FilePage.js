@@ -27,7 +27,7 @@ export default function FilePage() {
   }
   else{
     return (
-      <Grid className={classes.root}>
+      <Grid className={classes.root} align="center">
         <FileList />
       </Grid>
     );

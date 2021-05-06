@@ -8,7 +8,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 const useStyles = makeStyles((theme) => ({
   uploadButton: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: 20,
     right: 20,
     textTransform: 'none',
