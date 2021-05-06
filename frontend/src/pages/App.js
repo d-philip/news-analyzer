@@ -58,7 +58,7 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
-      <SnackbarProvider maxSnack={2}>
+      <SnackbarProvider maxSnack={3}>
         <Grid className={classes.root}>
           <Header />
           <Router>

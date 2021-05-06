@@ -40,8 +40,18 @@ export default function AnalyzeDialog(props) {
       })
       .catch((err) => {
         console.log(err);
-        enqueueSnackbar("Error analyzing file. Please try again later", {variant: 'error'});
+        enqueueSnackbar("Error analyzing file sentiment. Please try again later", {variant: 'error'});
       })
+      
+      axios.post(req_url+"generateKeywords", req_data, {headers: {'Content-Type': 'multipart/form-data'}})
+        .then((res) => {
+          enqueueSnackbar(res.data.response, {variant: 'success'});
+          props.refreshFiles(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          enqueueSnackbar("Error generatin file keywords. Please try again later", {variant: 'error'});
+        })
     props.handleClose();
   };
 

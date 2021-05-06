@@ -10,6 +10,7 @@ const clientId = '184252370004-1ue8k5g34tf7t55q85vq66rkdj8369uj.apps.googleuserc
 const useStyles = makeStyles((theme) => ({
   button: {
     color: 'white',
+    textTransform: 'none',
   },
 }));
 
