@@ -54,8 +54,8 @@ export default function Upload(props){
     axios.post(req_url, req_data, {headers: {'Content-Type': 'multipart/form-data'}})
       .then((res) => {
         console.log(res);
-        enqueueSnackbar('File successfully uploaded.', {variant: 'success'});
-        props.refreshFiles();
+        enqueueSnackbar(res.data.response, {variant: 'success'});
+        props.refreshFiles(true);
       })
       .catch((err) => {
         console.log(err);

@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import DeleteDialog from './DeleteDialog';
+import AnalyzeDialog from './AnalyzeDialog';
 
 const useStyles = makeStyles((theme) =>  ({
 
@@ -62,6 +63,15 @@ export default function FileMenu(props) {
         file_id={props.file_id}
         refreshFiles={props.refreshFiles}
       />
+      <AnalyzeDialog
+        open={analyzeDialogOpen}
+        handleClose={handleAnalyzeClose}
+        file_info={file}
+        file_id={props.file_id}
+        refreshFiles={props.refreshFiles}
+      />
+
+
       <IconButton className={classes.moreIcon} onClick={(e) => handleClick(e)}>
         <MoreHorizIcon />
       </IconButton>

@@ -11,8 +11,8 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
-  deleteButton: {
-    color: "#FF4747",
+  analyzeButton: {
+    color: "black",
     textTransform: 'none',
   },
   cancelButton: {
@@ -21,23 +21,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DeleteDialog(props) {
+export default function AnalyzeDialog(props) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { state } = React.useContext(AuthContext);
   const [file, setFile] = useState(props.file_info);
 
-  const handleDelete = (file) => {
-    const req_url = "http://54.91.38.146:7070/users/" + state.user.email + "/files/" + props.file_id;
-    axios.delete(req_url)
+  const handleAnalysis = (file) => {
+    const req_url = "http://54.91.38.146:6060/";
+    let req_data = new FormData();
+    req_data.append("email", state.user.email);
+    req_data.append("file_id", props.file_id);
+
+    axios.post(req_url+"analyzeSentiment", req_data, {headers: {'Content-Type': 'multipart/form-data'}})
       .then((res) => {
-        console.log(res);
-        enqueueSnackbar("Successfully deleted file.", {variant: 'success'});
+        enqueueSnackbar(res.data.response, {variant: 'success'});
         props.refreshFiles(true);
       })
       .catch((err) => {
         console.log(err);
-        enqueueSnackbar("Error deleting file. Please try again later", {variant: 'error'});
+        enqueueSnackbar("Error analyzing file. Please try again later", {variant: 'error'});
       })
     props.handleClose();
   };
@@ -47,22 +50,22 @@ export default function DeleteDialog(props) {
        <Dialog
          open={props.open}
          onClose={props.handleClose}
-         aria-labelledby="delete-dialog-title"
-         aria-describedby="delete-dialog-description"
+         aria-labelledby="analyze-dialog-title"
+         aria-describedby="analyze-dialog-description"
          scroll='paper'
        >
-        <DialogTitle id="delete-dialog-title">{"Delete File"}</DialogTitle>
+        <DialogTitle id="analyze-dialog-title">{"Analyze File"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="delete-dialog-description">
-            Are you sure you want to delete file "{file.file_name}"?
+          <DialogContentText id="analyze-dialog-description">
+            Would you like to perform text analysis on file "{file.file_name}"?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={props.handleClose} autoFocus className={classes.cancelButton}>
             Cancel
           </Button>
-          <Button onClick={() => handleDelete(file)} className={classes.deleteButton}>
-            Delete
+          <Button onClick={() => handleAnalysis(file)} className={classes.analyzeButton}>
+            Analyze
           </Button>
         </DialogActions>
        </Dialog>

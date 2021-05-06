@@ -28,14 +28,15 @@ export default function FileList() {
   const [files, setFiles] = useState([]);
   const classes = useStyles();
 
-  const loadFiles = () => {
+  const loadFiles = (refresh) => {
     const req_url = "http://54.91.38.146:7070/users/" + state.user.email + "/files/";
     axios.get(req_url)
       .then((res) => {
         console.log(res);
         const num_files = Object.keys(res.data).length;
         if (num_files > 0) {
-          enqueueSnackbar(`Loaded ${num_files} files.`, {variant: 'info'});
+          if (refresh) { enqueueSnackbar('Refreshed files.', {variant: 'info'}); }
+          else { enqueueSnackbar(`Loaded ${num_files} files.`, {variant: 'info'}); }
           setFiles(res.data);
         }
         else {
@@ -48,7 +49,7 @@ export default function FileList() {
   };
 
   useEffect(() => {
-    loadFiles();
+    loadFiles(false);
   }, []);
 
   return(
